@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { roboto } from "@/font/font";
 import {
   AccountBookFilled,
@@ -12,9 +12,9 @@ import {
   RightOutlined,
   LeftOutlined,
   AppstoreFilled,
-  CalendarFilled
+  CalendarFilled,
 } from "@ant-design/icons";
-import navWatermark from "../../../public/asset/sideBar.png"
+import navWatermark from "../../../public/asset/sideBar.png";
 import NavLogo from "../../../public/asset/NavLogo.png";
 import { useRouter } from "next/navigation";
 import { Layout, Menu, Button } from "antd";
@@ -24,17 +24,26 @@ import Image from "next/image";
 
 const { Sider, Content } = Layout;
 
+// import * as React from "react";
+import SideNavigation from "@cloudscape-design/components/side-navigation";
+import Icon from "@cloudscape-design/components/icon";
 
 const MainLayout = ({ children }) => {
-  const [collapsed, setCollapsed] = useState(false);
+  const [activeHref, setActiveHref] = useState("/dashboard");
+  const [isMounted, setIsMounted] = useState(false);
+  const router = useRouter();
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  if (!isMounted) return null;
   const toggleSider = () => {
     setCollapsed(!collapsed);
   };
-  const router = useRouter();
   return (
     <>
-      <Layout theme="dark" style={{ minHeight: "100vh" }}>
+      {/* <Layout theme="dark" style={{ minHeight: "100vh" }}>
         <Sider
           trigger={null}
           collapsible
@@ -46,23 +55,6 @@ const MainLayout = ({ children }) => {
           <div className=" h-[4.1rem] flex items-center justify-center  border-b">
             <Image className="" src={NavLogo} />
           </div>
-
-          {/* ... your existing Sider content */}
-          {/* <Menu
-            className={`${roboto.className} relative`}
-            theme="light"
-            mode="inline"
-            defaultSelectedKeys={["1"]}
-            // selectedKeys={[router.pathname]}
-            items={[
-              {
-                key: "1",
-                icon: <AppstoreFilled />,
-                label: <NavLink href="/requester">Dashboard</NavLink>,
-              },
-            ]
-        }
-          /> */}
           <Menu
             className={`${roboto.className} relative`}
             theme="light"
@@ -113,19 +105,7 @@ const MainLayout = ({ children }) => {
             ]}
           />
           <Image src={navWatermark} className="opacity-10"></Image>
-          {/* <Button
-            theme="dark"
-            className="bg-white absolute top-2/4 -right-3"
-            type="text"
-            icon={collapsed ? <RightOutlined className="" /> : <LeftOutlined />}
-            onClick={() => setCollapsed(!collapsed)}
-            style={{
-              fontSize: "16px",
-              width: 16,
-              height: 64,
-              clipPath: `polygon(0 0, 100% 21%, 99% 80%, 0% 100%)`,
-            }}
-          /> */}
+         
         </Sider>
         <Layout
           className="site-layout"
@@ -138,7 +118,88 @@ const MainLayout = ({ children }) => {
             {children}
           </Content>
         </Layout>
-      </Layout>
+      </Layout> */}
+
+      <div style={{ display: "flex", minHeight: "100vh" }}>
+        <div
+          style={{
+            width: "15vw",
+            borderRight: "1px solid #ddd",
+            position: "relative",
+            overflow:"hidden"
+          }}
+        >
+          <div
+            style={{
+              padding: "16px",
+              borderBottom: "1px solid #ddd",
+              zIndex: 1,
+            }}
+          >
+            <Image src={NavLogo} alt="NavLogo" />
+          </div>
+          <SideNavigation
+            style={{ zIndex: 10 }}
+            activeHref={activeHref}
+            onFollow={(event) => {
+              if (!event.detail.external) {
+                event.preventDefault();
+                setActiveHref(event.detail.href);
+                router.push(event.detail.href); // Update the route
+              }
+            }}
+            items={[
+              {
+                type: "section-group",
+                title: "Menu",
+                items: [
+                  { type: "link", text: "Dashboard", href: "/dashboard" },
+                  {
+                    type: "link",
+                    text: "Requester",
+                    href: "/dashboard/requester",
+                  },
+                ],
+              },
+              {
+                type: "section-group",
+                title: "Section 2",
+                items: [
+                  {
+                    type: "link",
+                    text: "Page 7",
+                    href: "#/page7",
+                  },
+                  {
+                    type: "link",
+                    text: "Page 8",
+                    href: "#/page8",
+                  },
+                  {
+                    type: "link",
+                    text: "Page 9",
+                    href: "#/page9",
+                  },
+                ],
+              },
+            ]}
+          />
+          <div
+            style={{
+              position: "absolute",
+              bottom: -300,
+              width: "100%",
+              opacity: 0.1,
+              zIndex: 0,
+            }}
+          >
+            <Image src={navWatermark} alt="Watermark" />
+          </div>
+        </div>
+        <div style={{ flex: 1, padding: "16px", width: "85vw" }}>
+          {children}
+        </div>
+      </div>
     </>
   );
 };

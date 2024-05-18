@@ -29,14 +29,14 @@ const Dashboard = () => {
             </span>
           </div>
           <PieCharts />
-          <div className="flex w-[100%] items-center justify-center gap-3 ">
+          {/* <div className="flex w-[100%] items-center justify-center gap-3 ">
             <span className="bg-[#00C49F] h-3 w-3 rounded-lg"></span>
             <p>Apptoved</p>
             <span className="bg-[#FFBB28] h-3 w-3 rounded-lg"></span>
             <p>Pending</p>
             <span className="bg-[#FF8042] h-3 w-3 rounded-lg"></span>
             <p>Reject</p>
-          </div>
+          </div> */}
         </div>
         <div className="bg-white w-[60%] h-[25rem] mt-3 ml-3 rounded-xl" style={{boxShadow: "0px 0px 5px 1px rgba(0 , 0, 0, 0.2)"}}>
           <div className="flex items-center justify-between p-4 ">
